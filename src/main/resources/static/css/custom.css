@@ -1,0 +1,1391 @@
+/* Custom CSS for Todo Application */
+
+/* Animation Keyframes */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+@keyframes fadeInScale {
+  0% { opacity: 0; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideInFromLeft {
+  0% { transform: translateX(-20px); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInFromRight {
+  0% { transform: translateX(20px); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInFromBottom {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-10px); }
+  60% { transform: translateY(-5px); }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes borderPulse {
+  0% { border-color: rgba(58, 134, 255, 0.4); }
+  50% { border-color: rgba(58, 134, 255, 0.8); }
+  100% { border-color: rgba(58, 134, 255, 0.4); }
+}
+
+@keyframes colorShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+:root {
+  /* Improved color palette for better readability and contrast */
+  --primary-color: #3a86ff;
+  --secondary-color: #4361ee;
+  --success-color: #38b000;
+  --warning-color: #ff9f1c;
+  --danger-color: #e63946;
+  --light-color: #f8f9fa;
+  --dark-color: #212529;
+  --gray-100: #f8f9fa;
+  --gray-200: #e9ecef;
+  --gray-300: #dee2e6;
+  --gray-400: #ced4da;
+  --gray-500: #adb5bd;
+  --gray-600: #6c757d;
+  --gray-700: #495057;
+  --gray-800: #343a40;
+  --gray-900: #212529;
+
+  /* Theme variables */
+  --bg-color: var(--dark-color);
+  --text-color: var(--light-color);
+  --card-bg: var(--gray-800);
+  --item-bg: var(--gray-700);
+  --item-hover-bg: var(--gray-600);
+  --footer-bg: var(--gray-800);
+  --modal-bg: var(--gray-800);
+
+  /* Typography variables */
+  --heading-font-weight: 600;
+  --body-font-weight: 400;
+  --body-line-height: 1.6;
+  --heading-line-height: 1.3;
+}
+
+/* Enhanced body styling */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.5s ease, color 0.5s ease;
+  line-height: var(--body-line-height);
+  font-weight: var(--body-font-weight);
+  font-size: 16px;
+  letter-spacing: 0.01em;
+}
+
+/* Theme transition overlay */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+body.theme-transition::after {
+  opacity: 0.3;
+  background-color: var(--text-color);
+}
+
+/* Light mode styles */
+body.light-mode {
+  --bg-color: var(--light-color);
+  --text-color: var(--dark-color);
+  --card-bg: white;
+  --item-bg: var(--gray-100);
+  --item-hover-bg: var(--gray-200);
+  --footer-bg: var(--gray-200);
+  --modal-bg: white;
+}
+
+/* System preference for color scheme */
+@media (prefers-color-scheme: light) {
+  body:not(.dark-mode) {
+    --bg-color: var(--light-color);
+    --text-color: var(--dark-color);
+    --card-bg: white;
+    --item-bg: var(--gray-100);
+    --item-hover-bg: var(--gray-200);
+    --footer-bg: var(--gray-200);
+    --modal-bg: white;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  body:not(.light-mode) {
+    --bg-color: var(--dark-color);
+    --text-color: var(--light-color);
+    --card-bg: var(--gray-800);
+    --item-bg: var(--gray-700);
+    --item-hover-bg: var(--gray-600);
+    --footer-bg: var(--gray-800);
+    --modal-bg: var(--gray-800);
+  }
+}
+
+/* Enhanced header */
+.app-header {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color), var(--primary-color));
+  background-size: 200% 200%;
+  animation: colorShift 15s ease infinite;
+  color: white;
+  padding: 2rem 0;
+  border-radius: 0 0 20px 20px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Larger header on bigger screens */
+@media (min-width: 1400px) {
+  .app-header {
+    padding: 2.5rem 0;
+    margin-bottom: 2rem;
+  }
+
+  .app-header h1 {
+    font-size: 2.5rem;
+  }
+
+  .app-header p {
+    font-size: 1.2rem;
+  }
+
+  .app-logo {
+    width: 55px;
+    height: 55px;
+  }
+}
+
+/* Extra large screens */
+@media (min-width: 2000px) {
+  .todo-container:not(.fullscreen) {
+    max-width: 1800px;
+    padding: 0 3rem;
+  }
+
+  .app-header {
+    padding: 3rem 0;
+  }
+
+  .kanban-board {
+    height: calc(100vh - 250px);
+  }
+}
+
+.app-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+  animation: shimmer 10s infinite linear;
+  pointer-events: none;
+}
+
+.app-header h1 {
+  font-weight: var(--heading-font-weight);
+  line-height: var(--heading-line-height);
+  margin-bottom: 0.5rem;
+  animation: slideInFromRight 0.8s ease-out;
+  letter-spacing: -0.02em;
+}
+
+.app-header p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  animation: slideInFromRight 0.8s ease-out 0.2s backwards;
+}
+
+.app-logo {
+  width: 45px;
+  height: 45px;
+  margin-right: 12px;
+  animation: float 5s ease-in-out infinite, slideInFromLeft 0.8s ease-out;
+}
+
+/* Footer styling */
+.app-footer {
+  margin-top: auto;
+  background-color: var(--footer-bg);
+  color: var(--text-color);
+  padding: 1.5rem 0;
+  font-size: 0.9rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.footer-links a {
+  color: var(--text-color);
+  margin: 0 10px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: var(--primary-color);
+}
+
+/* Enhanced card styling */
+.card {
+  border-radius: 12px;
+  border: none;
+  background-color: var(--card-bg);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  overflow: hidden;
+  animation: fadeInScale 0.5s ease-out;
+  margin-bottom: 1.25rem;
+  width: 100%; /* Ensure cards take full width of their container */
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Card sizing for larger screens */
+@media (min-width: 1400px) {
+  .card-header {
+    padding: 1.25rem 1.5rem;
+  }
+
+  .card-body {
+    padding: 1.5rem;
+  }
+}
+
+.card-header {
+  border-bottom: none;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  font-weight: var(--heading-font-weight);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-header h5 {
+  font-size: 1.15rem;
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
+}
+
+.card-header .badge {
+  font-size: 0.85rem;
+  padding: 0.35em 0.65em;
+  font-weight: 500;
+}
+
+.card-body {
+  padding: 1.25rem;
+}
+
+/* Enhanced button styling */
+.btn {
+  border-radius: 8px;
+  padding: 0.5rem 1.25rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  letter-spacing: 0.01em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn i {
+  margin-right: 0.4rem;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12);
+  opacity: 0.95;
+}
+
+.btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Improved focus state for accessibility */
+.btn:focus, .btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.4);
+}
+
+/* Ensure focus is visible even when using mouse */
+.btn:focus:not(:focus-visible) {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  border-color: var(--primary-color);
+  background-size: 200% auto;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+  background-position: right center;
+  border-color: var(--secondary-color);
+}
+
+/* Add pulsing effect to the Add Task button */
+[data-bs-toggle="modal"][data-bs-target="#addTaskModal"] {
+  animation: pulse 2s infinite;
+  box-shadow: 0 0 0 rgba(58, 134, 255, 0.4);
+}
+
+.btn-success {
+  background-color: var(--success-color);
+  border-color: var(--success-color);
+}
+
+.btn-danger {
+  background-color: var(--danger-color);
+  border-color: var(--danger-color);
+}
+
+.btn-outline-primary {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover, .btn-outline-primary.active {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.btn-lg {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.1rem;
+}
+
+.btn-floating {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  z-index: 1000;
+  transition: all 0.2s ease;
+}
+
+.btn-floating:hover {
+  transform: scale(1.05);
+  background-color: var(--secondary-color);
+}
+
+.btn-floating i {
+  margin-right: 0;
+  font-size: 1.25rem;
+}
+
+/* Task item styling and hover effect */
+.todo-item {
+  transition: all 0.25s ease;
+  border-left: 3px solid transparent;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+  background-color: var(--item-bg);
+  color: var(--text-color);
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.6rem;
+  border-radius: 8px !important;
+}
+
+.todo-item:hover {
+  border-left: 3px solid var(--primary-color);
+  background-color: var(--item-hover-bg);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+  transform: translateX(3px);
+}
+
+.todo-item .form-check {
+  margin-bottom: 0;
+}
+
+.todo-item .form-check-input {
+  cursor: pointer;
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.todo-title {
+  font-weight: 500;
+  font-size: 1.05rem;
+  margin-bottom: 0.3rem;
+  color: var(--text-color);
+  transition: color 0.2s ease;
+}
+
+.todo-description {
+  font-size: 0.9rem;
+  color: var(--gray-600);
+  margin-bottom: 0;
+  line-height: 1.4;
+}
+
+.delete-btn {
+  opacity: 0.8;
+  transition: all 0.2s ease;
+}
+
+.todo-item:hover .delete-btn {
+  opacity: 1;
+}
+
+/* Staggered animation for todo items */
+#todoList li:nth-child(1) { animation-delay: 0.1s; }
+#todoList li:nth-child(2) { animation-delay: 0.2s; }
+#todoList li:nth-child(3) { animation-delay: 0.3s; }
+#todoList li:nth-child(4) { animation-delay: 0.4s; }
+#todoList li:nth-child(5) { animation-delay: 0.5s; }
+#todoList li:nth-child(6) { animation-delay: 0.6s; }
+#todoList li:nth-child(7) { animation-delay: 0.7s; }
+#todoList li:nth-child(8) { animation-delay: 0.8s; }
+#todoList li:nth-child(9) { animation-delay: 0.9s; }
+#todoList li:nth-child(10) { animation-delay: 1.0s; }
+
+/* Checkbox animation */
+.form-check-input {
+  transition: all 0.3s ease;
+}
+
+.form-check-input:checked {
+  animation: pulse 0.5s ease-in-out;
+}
+
+/* Completed task styling */
+.completed {
+  text-decoration: line-through;
+  color: var(--gray-600);
+  transition: all 0.5s ease;
+}
+
+/* Empty state animation */
+#emptyMessage {
+  animation: fadeInScale 0.8s ease-out;
+}
+
+#emptyMessage i {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Loading spinner animation */
+.spinner-border {
+  animation: spin 1s linear infinite, pulse 2s ease-in-out infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Loading skeleton animation */
+@keyframes skeletonLoading {
+  0% { background-position: -200px 0; }
+  100% { background-position: calc(200px + 100%) 0; }
+}
+
+.skeleton-loader {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, 
+    var(--item-bg) 25%, 
+    var(--item-hover-bg) 50%, 
+    var(--item-bg) 75%
+  );
+  background-size: 200px 100%;
+  background-repeat: no-repeat;
+  border-radius: 4px;
+  animation: skeletonLoading 1.5s infinite linear;
+}
+
+.skeleton-item {
+  height: 100px;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.skeleton-title {
+  height: 24px;
+  width: 70%;
+  margin-bottom: 12px;
+}
+
+.skeleton-description {
+  height: 16px;
+  width: 90%;
+  margin-bottom: 8px;
+}
+
+.skeleton-description:last-child {
+  width: 60%;
+}
+
+/* Toast animations */
+#toast-container .toast {
+  animation: slideInFromBottom 0.3s ease-out;
+}
+
+/* Footer link animations */
+.footer-links a {
+  position: relative;
+  overflow: hidden;
+}
+
+.footer-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: var(--text-color);
+  transition: width 0.3s ease;
+}
+
+.footer-links a:hover::after {
+  width: 100%;
+}
+
+/* Enhanced modal styling */
+.modal-content {
+  border-radius: 15px;
+  border: none;
+  background-color: var(--modal-bg);
+  color: var(--text-color);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  animation: fadeInScale 0.4s ease-out;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.modal-header {
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  border-bottom: none;
+  padding: 1.25rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.modal-header::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+  animation: shimmer 8s infinite linear;
+  pointer-events: none;
+}
+
+.modal-title {
+  font-weight: 600;
+  animation: slideInFromLeft 0.5s ease-out;
+}
+
+.modal-body {
+  animation: fadeInScale 0.5s ease-out 0.1s backwards;
+  background-color: var(--modal-bg);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.modal-footer {
+  border-top: none;
+  padding: 1.25rem 1.5rem;
+  animation: slideInFromBottom 0.5s ease-out 0.2s backwards;
+  background-color: var(--modal-bg);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-close-white {
+  filter: brightness(0) invert(1);
+  transition: transform 0.3s ease;
+}
+
+.btn-close-white:hover {
+  transform: rotate(90deg);
+}
+
+/* Form control styling */
+.form-control {
+  border-radius: 8px;
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--gray-300);
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.form-control:focus {
+  box-shadow: 0 0 0 0.2rem rgba(58, 134, 255, 0.2);
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+.form-control::placeholder {
+  color: var(--gray-500);
+  opacity: 0.8;
+}
+
+/* Form validation styles */
+.form-control:required {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3E%3Ccircle cx='4' cy='4' r='3' fill='%23ff5555' opacity='0.6'/%3E%3C/svg%3E");
+  background-position: right 10px center;
+  background-repeat: no-repeat;
+  background-size: 8px 8px;
+  padding-right: 2.5rem;
+}
+
+.form-control:required:valid {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='12' viewBox='0 0 16 12'%3E%3Cpath fill='none' stroke='%2338b000' stroke-width='3' d='M1 5.917 5.724 10.5 15 1.5'/%3E%3C/svg%3E");
+  background-size: 16px 12px;
+  border-color: var(--success-color);
+}
+
+.form-control:focus:invalid {
+  border-color: var(--danger-color);
+  box-shadow: 0 0 0 0.2rem rgba(230, 57, 70, 0.2);
+}
+
+.was-validated .form-control:invalid,
+.form-control.is-invalid {
+  border-color: var(--danger-color);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23e63946' d='M6 0a6 6 0 1 0 0 12A6 6 0 0 0 6 0zm0 9a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm0-3a1 1 0 0 1-1-1V3a1 1 0 0 1 2 0v2a1 1 0 0 1-1 1z'/%3E%3C/svg%3E");
+  background-position: right 10px center;
+  background-repeat: no-repeat;
+  background-size: 12px 12px;
+  padding-right: 2.5rem;
+}
+
+.invalid-feedback {
+  display: none;
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 0.875em;
+  color: var(--danger-color);
+}
+
+.was-validated .form-control:invalid ~ .invalid-feedback,
+.form-control.is-invalid ~ .invalid-feedback {
+  display: block;
+}
+
+.form-label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+}
+
+.form-label i {
+  margin-right: 0.4rem;
+  color: var(--primary-color);
+}
+
+textarea.form-control {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.form-check-input {
+  cursor: pointer;
+  border-color: var(--gray-400);
+}
+
+.form-check-input:checked {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+/* Filter buttons styling */
+.filter-btn {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  border-color: var(--gray-300);
+}
+
+.filter-btn i {
+  margin-right: 0.4rem;
+  font-size: 0.85rem;
+}
+
+.filter-btn.active {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+  font-weight: 500;
+}
+
+.btn-group .filter-btn {
+  border-radius: 0;
+}
+
+.btn-group .filter-btn:first-child {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.btn-group .filter-btn:last-child {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+/* Action bar styling */
+.action-bar {
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.action-bar .row {
+  align-items: center;
+  margin: 0;
+}
+
+.action-bar .btn-group {
+  display: flex;
+  width: 100%;
+}
+
+.action-bar .btn {
+  flex: 1;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Todo item animation styles */
+.todo-item-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.todo-item-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.todo-item-exit {
+  opacity: 1;
+}
+
+.todo-item-exit-active {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+/* Completed task styling */
+.completed {
+  text-decoration: line-through;
+  color: var(--gray-600);
+}
+
+.form-check-input:checked ~ div .todo-title,
+.completed {
+  text-decoration: line-through;
+  color: var(--gray-600);
+}
+
+/* Todo container */
+.todo-container {
+  margin: 0 auto;
+  padding: 0 1rem;
+  transition: max-width 0.3s ease, padding 0.3s ease;
+  width: 100%;
+}
+
+/* Default container width for non-fullscreen mode */
+.todo-container:not(.fullscreen) {
+  max-width: 1400px; /* Increased from 1200px to better utilize widescreen displays */
+}
+
+/* Extra wide screens */
+@media (min-width: 1600px) {
+  .todo-container:not(.fullscreen) {
+    max-width: 1600px;
+    padding: 0 2rem;
+  }
+}
+
+/* Fullscreen container */
+.todo-container.fullscreen {
+  max-width: 100%;
+  padding: 0 2rem;
+}
+
+/* Body in fullscreen mode */
+body.is-fullscreen {
+  overflow: hidden;
+}
+
+body.is-fullscreen .app-header,
+body.is-fullscreen .app-footer {
+  display: none;
+}
+
+body.is-fullscreen .todo-container {
+  height: 100vh;
+  padding: 1.5rem;
+}
+
+body.is-fullscreen .kanban-board {
+  height: calc(100vh - 80px); /* More space in fullscreen mode */
+}
+
+body.is-fullscreen .action-bar {
+  margin-bottom: 1.5rem; /* More spacing in fullscreen mode */
+}
+
+/* Kanban board styles */
+.kanban-board {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 220px); /* Taller board to utilize more vertical space */
+}
+
+.kanban-board .row {
+  flex: 1;
+  min-height: 0; /* Important for flex child to respect parent height */
+}
+
+.kanban-column {
+  min-height: 300px; /* Minimum height for small screens */
+  height: 100%; /* Take full height of parent */
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  margin-bottom: 1.5rem;
+}
+
+.kanban-column .card-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.75rem;
+}
+
+.kanban-items {
+  min-height: 100%;
+}
+
+/* Kanban item styles */
+.kanban-item {
+  background-color: var(--item-bg);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.25s ease;
+  border-left: 3px solid transparent;
+  cursor: grab;
+  animation: fadeInScale 0.5s ease-out;
+  word-break: break-word;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 120px; /* Minimum height for consistency */
+  position: relative; /* For priority indicator positioning */
+}
+
+/* Task priority indicators */
+.kanban-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 24px 24px 0;
+  border-color: transparent transparent transparent transparent;
+  transition: border-color 0.3s ease;
+}
+
+.kanban-item.priority-high::before {
+  border-color: transparent var(--danger-color) transparent transparent;
+}
+
+.kanban-item.priority-medium::before {
+  border-color: transparent var(--warning-color) transparent transparent;
+}
+
+.kanban-item.priority-low::before {
+  border-color: transparent var(--success-color) transparent transparent;
+}
+
+/* Larger kanban items on bigger screens */
+@media (min-width: 1400px) {
+  .kanban-item {
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    min-height: 140px;
+  }
+
+  .kanban-item .todo-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .kanban-item .todo-description {
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+  }
+}
+
+/* Dragging styles */
+.kanban-item.dragging {
+  opacity: 0.8;
+  cursor: grabbing;
+  transform: scale(0.98);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  border: 2px dashed var(--primary-color);
+  animation: borderPulse 1.5s infinite;
+  background-color: var(--item-hover-bg);
+}
+
+/* Drop target styles */
+.kanban-items.drag-over {
+  background-color: rgba(58, 134, 255, 0.1);
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 2px var(--primary-color);
+  transition: all 0.2s ease;
+  animation: borderPulse 1.5s infinite;
+}
+
+/* Add a placeholder for the dragged item */
+.kanban-items.drag-over::after {
+  content: 'Drop here';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  margin: 10px;
+  border: 2px dashed var(--primary-color);
+  border-radius: 8px;
+  color: var(--primary-color);
+  font-weight: 500;
+  opacity: 0.7;
+}
+
+.kanban-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-left: 3px solid var(--primary-color);
+}
+
+.kanban-item .todo-title {
+  font-weight: 500;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.kanban-item .todo-description {
+  font-size: 0.85rem;
+  color: var(--gray-600);
+  margin-bottom: 0.5rem;
+}
+
+.kanban-item .item-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.kanban-item .item-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Column specific styles */
+#todoList-todo .kanban-item {
+  border-left-color: var(--primary-color);
+}
+
+#todoList-inprogress .kanban-item {
+  border-left-color: var(--warning-color);
+}
+
+#todoList-done .kanban-item {
+  border-left-color: var(--success-color);
+  opacity: 0.8;
+}
+
+/* Empty column placeholder */
+.kanban-empty {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--gray-500);
+  font-size: 0.9rem;
+}
+
+.kanban-empty i {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  /* Header adjustments */
+  .app-header {
+    padding: 1.25rem 0;
+    border-radius: 0 0 12px 12px;
+    margin-bottom: 1rem;
+  }
+
+  .app-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .app-header p {
+    font-size: 0.9rem;
+  }
+
+  .app-logo {
+    width: 35px;
+    height: 35px;
+    margin-right: 8px;
+  }
+
+  /* Kanban board mobile adjustments */
+  .kanban-board {
+    height: auto; /* Override fixed height on mobile */
+    margin-bottom: 2rem;
+  }
+
+  .kanban-board .row {
+    flex-direction: column;
+  }
+
+  .kanban-column {
+    min-height: auto;
+    height: auto;
+    max-height: 450px;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Make sure columns take full width on mobile */
+  .kanban-board .col-md-4 {
+    width: 100%;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  /* Adjust kanban items for mobile */
+  .kanban-item {
+    padding: 0.75rem;
+  }
+
+  .kanban-item .todo-title {
+    font-size: 0.95rem;
+  }
+
+  .kanban-item .todo-description {
+    font-size: 0.8rem;
+  }
+
+  /* Fullscreen adjustments for mobile */
+  .todo-container.fullscreen {
+    padding: 0 0.5rem;
+  }
+
+  body.is-fullscreen .todo-container {
+    height: 100vh;
+    padding: 0.5rem;
+  }
+
+  body.is-fullscreen .kanban-column {
+    max-height: calc(100vh - 80px);
+  }
+
+  /* Improve button visibility on mobile */
+  .action-bar .btn {
+    padding: 0.5rem 0.25rem;
+  }
+
+  .action-bar .btn i {
+    margin-right: 0.25rem;
+  }
+
+  /* Footer adjustments */
+  .app-footer {
+    padding: 1rem 0;
+    font-size: 0.8rem;
+  }
+
+  .footer-links a {
+    margin: 0 5px;
+    font-size: 0.8rem;
+  }
+
+  /* Card adjustments */
+  .card {
+    border-radius: 10px;
+    margin-bottom: 1rem;
+  }
+
+  .card-header {
+    padding: 0.75rem 1rem;
+  }
+
+  .card-header h5 {
+    font-size: 1rem;
+  }
+
+  .card-body {
+    padding: 1rem;
+  }
+
+  /* Todo item adjustments */
+  .todo-item {
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    border-radius: 6px !important;
+  }
+
+  .todo-title {
+    font-size: 0.95rem;
+  }
+
+  .todo-description {
+    font-size: 0.8rem;
+  }
+
+  /* Button adjustments */
+  .btn {
+    padding: 0.4rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .btn-lg {
+    padding: 0.6rem 1.25rem;
+    font-size: 1rem;
+  }
+
+  /* Filter button adjustments */
+  .filter-btn {
+    padding: 0.4rem 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .filter-btn i {
+    margin-right: 0.2rem;
+    font-size: 0.8rem;
+  }
+
+  /* Small screen optimizations */
+  .btn-floating {
+    width: 50px;
+    height: 50px;
+    bottom: 1.5rem;
+    right: 1.5rem;
+  }
+
+  /* Form adjustments */
+  .form-control {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .form-label {
+    font-size: 0.9rem;
+  }
+
+  /* Modal adjustments */
+  .modal-dialog {
+    margin: 0.5rem;
+    max-width: calc(100% - 1rem);
+  }
+
+  .modal-header {
+    padding: 0.75rem 1rem;
+  }
+
+  .modal-body {
+    padding: 1rem;
+  }
+
+  .modal-title {
+    font-size: 1.1rem;
+  }
+
+  /* Optimize animations for mobile */
+  .card:hover {
+    transform: translateY(-2px);
+  }
+
+  .todo-item:hover {
+    transform: translateX(2px);
+  }
+
+  /* Reduce animation duration for better performance */
+  .app-logo {
+    animation: float 4s ease-in-out infinite, slideInFromLeft 0.6s ease-out;
+  }
+
+  /* Simplify some animations for better performance */
+  @keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-3px); }
+    100% { transform: translateY(0px); }
+  }
+
+  /* Reduce or disable some animations for better performance */
+  .app-header {
+    animation: none; /* Disable gradient animation on mobile */
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  }
+
+  /* Simplify button animations */
+  [data-bs-toggle="modal"][data-bs-target="#addTaskModal"] {
+    animation: pulse 3s infinite; /* Slower pulse */
+  }
+
+  /* Use simpler transitions */
+  .btn, .card, .todo-item, .kanban-item {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  /* Reduce staggered delay for faster loading perception */
+  #todoList li:nth-child(1) { animation-delay: 0.05s; }
+  #todoList li:nth-child(2) { animation-delay: 0.1s; }
+  #todoList li:nth-child(3) { animation-delay: 0.15s; }
+  #todoList li:nth-child(n+4) { animation-delay: 0.2s; }
+
+  /* Ensure toast animations work well on mobile */
+  #toast-container .toast {
+    animation: slideInFromBottom 0.2s ease-out;
+  }
+}
+
+/* Very small screens (under 400px) */
+@media (max-width: 400px) {
+  .filter-btn span, .view-btn span {
+    display: none;
+  }
+
+  .filter-btn i, .view-btn i {
+    margin-right: 0;
+    font-size: 1rem;
+  }
+
+  .action-bar .btn {
+    padding: 0.5rem;
+  }
+
+  .action-bar .row > div {
+    padding: 0 0.25rem;
+  }
+
+  .btn-group {
+    gap: 0.25rem;
+  }
+
+  /* Make Add Task button more prominent */
+  [data-bs-toggle="modal"][data-bs-target="#addTaskModal"] {
+    font-size: 0.9rem;
+    padding: 0.5rem;
+  }
+
+  [data-bs-toggle="modal"][data-bs-target="#addTaskModal"] i {
+    margin-right: 0.25rem;
+  }
+}

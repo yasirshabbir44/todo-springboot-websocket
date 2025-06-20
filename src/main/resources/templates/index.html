@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Master | Organize Your Tasks</title>
+    <meta name="description" content="Task Master - A professional task management application to boost your productivity">
+    <meta name="keywords" content="task, todo, productivity, organization">
+
+    <!-- Favicon -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/favicon.svg">
+
+    <!-- Stylesheets -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/custom.css">
+    <!-- All styles moved to custom.css -->
+</head>
+<body>
+    <!-- App Header -->
+    <div class="app-header">
+        <div class="container">
+            <div class="d-flex justify-content-center align-items-center mb-3">
+                <img src="/logo.svg" alt="Task Master Logo" class="app-logo">
+                <h1 class="mb-0">Task Master</h1>
+            </div>
+            <p class="text-center text-light mb-0">Organize your tasks, boost your productivity</p>
+            <div class="d-flex justify-content-center mt-3 gap-2">
+                <button id="darkModeToggle" class="btn btn-sm btn-outline-light" title="Toggle Dark/Light Mode">
+                    <i class="fas fa-moon"></i> <span id="themeText">Dark Mode</span>
+                </button>
+                <button id="fullscreenToggle" class="btn btn-sm btn-outline-light" title="Toggle Fullscreen">
+                    <i class="fas fa-expand"></i> <span id="fullscreenText">Fullscreen</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid todo-container" id="mainContainer">
+        <!-- Action Bar -->
+        <div class="card action-bar">
+            <div class="card-body p-2">
+                <div class="row g-2 align-items-center">
+                    <!-- View Toggle -->
+                    <div class="col-md-4">
+                        <div class="btn-group w-100" role="group" aria-label="View toggle">
+                            <button type="button" onclick="toggleView('kanban')" class="btn btn-outline-primary view-btn active" id="kanbanViewBtn">
+                                <i class="fas fa-columns"></i><span>Board View</span>
+                            </button>
+                            <button type="button" onclick="toggleView('list')" class="btn btn-outline-primary view-btn" id="listViewBtn">
+                                <i class="fas fa-list"></i><span>List View</span>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Filter buttons -->
+                    <div class="col-md-4">
+                        <div class="btn-group w-100" role="group" aria-label="Filter tasks">
+                            <button type="button" onclick="filterTodos('all')" class="btn btn-outline-primary filter-btn active">
+                                <i class="fas fa-list-ul"></i><span>All</span>
+                            </button>
+                            <button type="button" onclick="filterTodos('incomplete')" class="btn btn-outline-primary filter-btn">
+                                <i class="fas fa-hourglass-half"></i><span>Pending</span>
+                            </button>
+                            <button type="button" onclick="filterTodos('completed')" class="btn btn-outline-primary filter-btn">
+                                <i class="fas fa-check-double"></i><span>Completed</span>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Add Task Button -->
+                    <div class="col-md-4">
+                        <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#addTaskModal">
+                            <i class="fas fa-plus-circle"></i> Add Task
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kanban Board View -->
+        <div id="kanbanView" class="kanban-board">
+            <div class="row g-3">
+                <!-- To Do Column -->
+                <div class="col-md-4">
+                    <div class="card kanban-column">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0"><i class="fas fa-clipboard-list me-2"></i>To Do</h5>
+                            <span class="badge bg-light text-primary rounded-pill" id="todoCount-todo">0</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="kanban-items" id="todoList-todo">
+                                <!-- To Do items will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- In Progress Column -->
+                <div class="col-md-4">
+                    <div class="card kanban-column">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0"><i class="fas fa-spinner me-2"></i>In Progress</h5>
+                            <span class="badge bg-light text-primary rounded-pill" id="todoCount-inprogress">0</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="kanban-items" id="todoList-inprogress">
+                                <!-- In Progress items will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Done Column -->
+                <div class="col-md-4">
+                    <div class="card kanban-column">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0"><i class="fas fa-check-circle me-2"></i>Done</h5>
+                            <span class="badge bg-light text-primary rounded-pill" id="todoCount-done">0</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="kanban-items" id="todoList-done">
+                                <!-- Done items will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- List View (Original) -->
+        <div id="listView" class="d-none">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-tasks me-2"></i>My Tasks</h5>
+                    <span class="badge bg-light text-primary rounded-pill" id="todoCount">0</span>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group" id="todoList">
+                        <!-- Todos will be loaded here -->
+                    </ul>
+                    <div id="emptyMessage" class="text-center mt-4 mb-2 d-none">
+                        <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">No tasks found. Add a new task to get started!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Task Modal -->
+    <div class="modal fade" id="addTaskModal" tabindex="-1" aria-labelledby="addTaskModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addTaskModalLabel"><i class="fas fa-plus-circle me-2"></i>Add Task</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="todoForm">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">
+                                <i class="fas fa-heading"></i> Task Title
+                            </label>
+                            <input type="text" class="form-control" id="title" placeholder="What needs to be done?" required autocomplete="off">
+                        </div>
+                        <div class="mb-4">
+                            <label for="description" class="form-label">
+                                <i class="fas fa-align-left"></i> Description (Optional)
+                            </label>
+                            <textarea class="form-control" id="description" rows="3" placeholder="Add details about your task"></textarea>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-plus"></i> Add Task
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Button for Mobile -->
+    <div class="btn-floating d-md-none" id="addTaskBtn">
+        <i class="fas fa-plus fa-lg"></i>
+    </div>
+
+    <!-- Todo Item Template (List View) -->
+    <template id="todoItemTemplate">
+        <li class="list-group-item todo-item">
+            <div class="row align-items-center g-2">
+                <div class="col-auto">
+                    <div class="form-check">
+                        <input class="form-check-input toggle-checkbox" type="checkbox" title="Mark as complete">
+                    </div>
+                </div>
+                <div class="col">
+                    <h5 class="todo-title"></h5>
+                    <p class="todo-description"></p>
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-sm btn-danger delete-btn" title="Delete task">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </li>
+    </template>
+
+    <!-- Kanban Item Template -->
+    <template id="kanbanItemTemplate">
+        <div class="kanban-item">
+            <h5 class="todo-title"></h5>
+            <p class="todo-description"></p>
+            <div class="item-footer">
+                <div class="item-actions">
+                    <button class="btn btn-sm btn-outline-primary move-btn" title="Move to next column">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger delete-btn" title="Delete task">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Empty Column Template -->
+    <template id="emptyColumnTemplate">
+        <div class="kanban-empty">
+            <i class="fas fa-clipboard"></i>
+            <p>No tasks in this column</p>
+        </div>
+    </template>
+
+    <!-- Skeleton Loader Template for Kanban -->
+    <template id="skeletonKanbanTemplate">
+        <div class="skeleton-item">
+            <div class="skeleton-loader skeleton-title"></div>
+            <div class="skeleton-loader skeleton-description"></div>
+            <div class="skeleton-loader skeleton-description"></div>
+        </div>
+    </template>
+
+    <!-- Skeleton Loader Template for List -->
+    <template id="skeletonListTemplate">
+        <li class="list-group-item todo-item">
+            <div class="row align-items-center g-2">
+                <div class="col-auto">
+                    <div class="skeleton-loader" style="width: 20px; height: 20px; border-radius: 50%;"></div>
+                </div>
+                <div class="col">
+                    <div class="skeleton-loader skeleton-title"></div>
+                    <div class="skeleton-loader skeleton-description"></div>
+                </div>
+                <div class="col-auto">
+                    <div class="skeleton-loader" style="width: 30px; height: 30px; border-radius: 4px;"></div>
+                </div>
+            </div>
+        </li>
+    </template>
+
+    <!-- Footer -->
+    <footer class="app-footer mt-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start">
+                    <div class="d-flex align-items-center justify-content-center justify-content-md-start mb-2">
+                        <img src="/logo.svg" alt="Task Master Logo" class="app-logo" style="width: 28px; height: 28px;">
+                        <span class="ms-2 fw-bold">Task Master</span>
+                    </div>
+                    <p class="small">© 2023 Task Master. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <div class="footer-links mb-2">
+                        <a href="#" class="text-decoration-none"><i class="fas fa-question-circle"></i> Help</a>
+                        <a href="#" class="text-decoration-none"><i class="fas fa-shield-alt"></i> Privacy</a>
+                        <a href="#" class="text-decoration-none"><i class="fas fa-file-contract"></i> Terms</a>
+                    </div>
+                    <p class="small">Made with <i class="fas fa-heart text-danger"></i> by Task Master Team</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- WebSocket libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.6.1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+
+    <script>
+        // Audio Context for sound effects
+        let audioContext;
+
+        // Initialize audio context on user interaction to comply with browser policies
+        function initAudioContext() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        // Play a click sound
+        function playClickSound() {
+            if (!audioContext) return;
+
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.start();
+            oscillator.stop(audioContext.currentTime + 0.1);
+        }
+
+
+        // Track current view mode
+        let currentView = 'kanban';
+
+        // WebSocket client
+        let stompClient = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize
+            loadTodos();
+            setupEventListeners();
+            initializeTheme();
+            setupDragAndDrop();
+            connectWebSocket();
+
+            // Default to kanban view
+            toggleView('kanban');
+
+            // Show animation when page loads
+            document.querySelector('.app-header').classList.add('animate__animated', 'animate__fadeIn');
+
+            // Initialize audio context on first user interaction
+            document.addEventListener('click', function() {
+                initAudioContext();
+            }, { once: true });
+        });
+
+        // Connect to WebSocket server
+        function connectWebSocket() {
+            const socket = new SockJS('/ws');
+            stompClient = Stomp.over(socket);
+
+            // Connect without logging
+            stompClient.debug = null;
+
+            stompClient.connect({}, function(frame) {
+                console.log('Connected to WebSocket: ' + frame);
+
+                // Subscribe to todo updates
+                stompClient.subscribe('/topic/todos', function(message) {
+                    handleTodoUpdate(JSON.parse(message.body));
+                });
+
+                showToast('Real-time updates enabled', 'info');
+            }, function(error) {
+                console.error('WebSocket connection error: ', error);
+                // Try to reconnect after a delay
+                setTimeout(connectWebSocket, 5000);
+            });
+        }
+
+        // Handle todo updates received via WebSocket
+        function handleTodoUpdate(update) {
+            console.log('Received update:', update);
+
+            const todo = update.todo;
+            const action = update.action;
+
+            // Show notification based on the action
+            if (action === 'CREATED') {
+                showToast(`New task added: "${todo.title}"`, 'info');
+            } else if (action === 'UPDATED') {
+                showToast(`Task updated: "${todo.title}"`, 'info');
+            } else if (action === 'DELETED') {
+                showToast(`Task deleted: "${todo.title}"`, 'info');
+            }
+
+            // Reload todos to reflect the changes
+            loadTodos();
+        }
+
+        function initializeTheme() {
+            // Check if user has a saved preference
+            const savedTheme = localStorage.getItem('theme');
+
+            // Default to light mode if no preference is saved or if preference is light
+            if (savedTheme === 'dark') {
+                document.body.classList.remove('light-mode');
+                updateThemeToggle(false);
+            } else {
+                // Default is light mode
+                document.body.classList.add('light-mode');
+                updateThemeToggle(true);
+                // If no preference was saved, save light as the default
+                if (!savedTheme) {
+                    localStorage.setItem('theme', 'light');
+                }
+            }
+        }
+
+        function updateThemeToggle(isLightMode) {
+            const themeIcon = document.querySelector('#darkModeToggle i');
+            const themeText = document.getElementById('themeText');
+
+            if (isLightMode) {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                themeText.textContent = 'Dark Mode';
+            } else {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                themeText.textContent = 'Light Mode';
+            }
+        }
+
+        function toggleTheme() {
+            const isLightMode = document.body.classList.contains('light-mode');
+
+            // Add transition class
+            document.body.classList.add('theme-transition');
+
+            // Use setTimeout to allow the transition overlay to appear before changing theme
+            setTimeout(() => {
+                if (isLightMode) {
+                    // Switch to dark mode
+                    document.body.classList.remove('light-mode');
+                    localStorage.setItem('theme', 'dark');
+                    updateThemeToggle(false);
+                    showToast('Dark mode enabled', 'info');
+                } else {
+                    // Switch to light mode
+                    document.body.classList.add('light-mode');
+                    localStorage.setItem('theme', 'light');
+                    updateThemeToggle(true);
+                    showToast('Light mode enabled', 'info');
+                }
+
+                // Remove transition class after the theme change is complete
+                setTimeout(() => {
+                    document.body.classList.remove('theme-transition');
+                }, 500); // Match this with the CSS transition duration
+            }, 50);
+        }
+
+        // Toggle fullscreen mode
+        function toggleFullscreen() {
+            const container = document.getElementById('mainContainer');
+
+            if (!document.fullscreenElement) {
+                // Enter fullscreen
+                try {
+                    if (container.requestFullscreen) {
+                        container.requestFullscreen();
+                    } else if (container.mozRequestFullScreen) { // Firefox
+                        container.mozRequestFullScreen();
+                    } else if (container.webkitRequestFullscreen) { // Chrome, Safari, Opera
+                        container.webkitRequestFullscreen();
+                    } else if (container.msRequestFullscreen) { // IE/Edge
+                        container.msRequestFullscreen();
+                    }
+                    container.classList.add('fullscreen');
+                    document.body.classList.add('is-fullscreen');
+                    updateFullscreenButton(true);
+                    showToast('Entered fullscreen mode', 'info');
+                } catch (err) {
+                    console.error('Fullscreen error:', err);
+                    // Fallback for browsers that don't support fullscreen API
+                    container.classList.add('fullscreen');
+                    document.body.classList.add('is-fullscreen');
+                    updateFullscreenButton(true);
+                    showToast('Using simulated fullscreen mode', 'info');
+                }
+            } else {
+                // Exit fullscreen
+                try {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    } else if (document.mozCancelFullScreen) {
+                        document.mozCancelFullScreen();
+                    } else if (document.webkitExitFullscreen) {
+                        document.webkitExitFullscreen();
+                    } else if (document.msExitFullscreen) {
+                        document.msExitFullscreen();
+                    }
+                    container.classList.remove('fullscreen');
+                    document.body.classList.remove('is-fullscreen');
+                    updateFullscreenButton(false);
+                    showToast('Exited fullscreen mode', 'info');
+                } catch (err) {
+                    console.error('Fullscreen exit error:', err);
+                    // Fallback for browsers that don't support fullscreen API
+                    container.classList.remove('fullscreen');
+                    document.body.classList.remove('is-fullscreen');
+                    updateFullscreenButton(false);
+                    showToast('Exited simulated fullscreen mode', 'info');
+                }
+            }
+        }
+
+        // Update fullscreen button icon and text
+        function updateFullscreenButton(isFullscreen) {
+            const fullscreenIcon = document.querySelector('#fullscreenToggle i');
+            const fullscreenText = document.getElementById('fullscreenText');
+
+            if (isFullscreen) {
+                fullscreenIcon.classList.remove('fa-expand');
+                fullscreenIcon.classList.add('fa-compress');
+                fullscreenText.textContent = 'Exit Fullscreen';
+            } else {
+                fullscreenIcon.classList.remove('fa-compress');
+                fullscreenIcon.classList.add('fa-expand');
+                fullscreenText.textContent = 'Fullscreen';
+            }
+        }
+
+        // Handle fullscreen change events
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+        document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+        document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+
+        function handleFullscreenChange() {
+            const container = document.getElementById('mainContainer');
+            if (!document.fullscreenElement && 
+                !document.webkitFullscreenElement && 
+                !document.mozFullScreenElement && 
+                !document.msFullscreenElement) {
+                // Exit fullscreen
+                container.classList.remove('fullscreen');
+                document.body.classList.remove('is-fullscreen');
+                updateFullscreenButton(false);
+            } else {
+                // Enter fullscreen
+                container.classList.add('fullscreen');
+                document.body.classList.add('is-fullscreen');
+                updateFullscreenButton(true);
+            }
+        }
+
+        // Toggle between kanban and list views
+        function toggleView(view) {
+            playClickSound();
+            currentView = view;
+
+            const kanbanView = document.getElementById('kanbanView');
+            const listView = document.getElementById('listView');
+            const kanbanViewBtn = document.getElementById('kanbanViewBtn');
+            const listViewBtn = document.getElementById('listViewBtn');
+
+            if (view === 'kanban') {
+                kanbanView.classList.remove('d-none');
+                listView.classList.add('d-none');
+                kanbanViewBtn.classList.add('active');
+                listViewBtn.classList.remove('active');
+                showToast('Switched to Board View', 'info');
+            } else {
+                kanbanView.classList.add('d-none');
+                listView.classList.remove('d-none');
+                kanbanViewBtn.classList.remove('active');
+                listViewBtn.classList.add('active');
+                showToast('Switched to List View', 'info');
+            }
+
+            // Reload todos to update the view
+            loadTodos();
+        }
+
+        function setupEventListeners() {
+            // Dark mode toggle
+            document.getElementById('darkModeToggle').addEventListener('click', function() {
+                playClickSound();
+                toggleTheme();
+            });
+
+            // Fullscreen toggle
+            document.getElementById('fullscreenToggle').addEventListener('click', function() {
+                playClickSound();
+                toggleFullscreen();
+            });
+
+            // Form submission
+            document.getElementById('todoForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const title = document.getElementById('title').value.trim();
+                const description = document.getElementById('description').value.trim();
+
+                if (title) {
+                    // Play click sound on form submission
+                    playClickSound();
+                    createTodo(title, description);
+
+                    // Reset form with animation
+                    this.reset();
+
+                    // Close the modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('addTaskModal'));
+                    if (modal) {
+                        modal.hide();
+                    }
+
+                    // Show success toast
+                    showToast('Task added successfully!', 'success');
+                }
+            });
+
+            // Mobile floating action button
+            const addTaskBtn = document.getElementById('addTaskBtn');
+            if (addTaskBtn) {
+                addTaskBtn.addEventListener('click', function() {
+                    // Play click sound
+                    playClickSound();
+                    // Open the modal
+                    const modal = new bootstrap.Modal(document.getElementById('addTaskModal'));
+                    modal.show();
+                });
+            }
+
+            // Modal shown event - focus on title input
+            const addTaskModal = document.getElementById('addTaskModal');
+            if (addTaskModal) {
+                addTaskModal.addEventListener('shown.bs.modal', function() {
+                    document.getElementById('title').focus();
+                });
+            }
+
+            // Add click sound to the regular Add Task button
+            const addTaskButton = document.querySelector('[data-bs-toggle="modal"][data-bs-target="#addTaskModal"]');
+            if (addTaskButton) {
+                addTaskButton.addEventListener('click', function() {
+                    playClickSound();
+                });
+            }
+
+            // Filter buttons animation
+            document.querySelectorAll('.filter-btn, .view-btn').forEach(btn => {
+                btn.addEventListener('mouseenter', function() {
+                    this.classList.add('animate__animated', 'animate__pulse');
+                });
+
+                btn.addEventListener('animationend', function() {
+                    this.classList.remove('animate__animated', 'animate__pulse');
+                });
+            });
+
+            // Fullscreen change events are handled globally
+        }
+
+        // Load all todos
+        function loadTodos() {
+            // Show skeleton loaders while loading
+            showSkeletonLoaders();
+
+            fetch('/api/todos')
+                .then(response => response.json())
+                .then(todos => {
+                    if (currentView === 'kanban') {
+                        displayKanbanTodos(todos);
+                    } else {
+                        displayListTodos(todos);
+                    }
+                    updateTodoCount(todos.length);
+                })
+                .catch(error => {
+                    console.error('Error loading todos:', error);
+                    showToast('Failed to load tasks. Please try again.', 'error');
+                });
+        }
+
+        // Helper function to show skeleton loaders
+        function showSkeletonLoaders() {
+            if (currentView === 'list') {
+                const todoList = document.getElementById('todoList');
+                todoList.innerHTML = ''; // Clear current content
+
+                // Add skeleton loaders
+                const skeletonTemplate = document.getElementById('skeletonListTemplate');
+                for (let i = 0; i < 5; i++) { // Show 5 skeleton items
+                    const skeleton = document.importNode(skeletonTemplate.content, true);
+                    todoList.appendChild(skeleton);
+                }
+            } else {
+                document.querySelectorAll('.kanban-items').forEach(column => {
+                    column.innerHTML = ''; // Clear current content
+
+                    // Add skeleton loaders
+                    const skeletonTemplate = document.getElementById('skeletonKanbanTemplate');
+                    for (let i = 0; i < 3; i++) { // Show 3 skeleton items per column
+                        const skeleton = document.importNode(skeletonTemplate.content, true);
+                        column.appendChild(skeleton);
+                    }
+                });
+            }
+        }
+
+        // Filter todos by completion status
+        function filterTodos(filter) {
+            // Play click sound when filter is changed
+            playClickSound();
+
+            // Highlight active filter
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+
+                // Check which filter this button corresponds to
+                if ((filter === 'completed' && btn.textContent.includes('Completed')) ||
+                    (filter === 'incomplete' && btn.textContent.includes('Pending')) ||
+                    (filter === 'all' && btn.textContent.includes('All'))) {
+                    btn.classList.add('active');
+                }
+            });
+
+            let url = '/api/todos';
+            let filterName = 'All';
+
+            if (filter === 'completed') {
+                url = '/api/todos/completed';
+                filterName = 'Completed';
+            } else if (filter === 'incomplete') {
+                url = '/api/todos/incomplete';
+                filterName = 'Pending';
+            } else if (filter === 'all') {
+                url = '/api/todos';
+                filterName = 'All';
+            }
+
+            // Show loading state with skeleton loaders
+            showSkeletonLoaders();
+
+            fetch(url)
+                .then(response => response.json())
+                .then(todos => {
+                    if (currentView === 'kanban') {
+                        displayKanbanTodos(todos);
+                    } else {
+                        displayListTodos(todos);
+                    }
+                    updateTodoCount(todos.length);
+                    showToast(`Showing ${filterName} tasks`, 'info');
+                })
+                .catch(error => {
+                    console.error('Error filtering todos:', error);
+                    showToast('Failed to filter tasks. Please try again.', 'error');
+                });
+        }
+
+        // Update todo count badge
+        function updateTodoCount(count) {
+            // Update main count
+            const todoCount = document.getElementById('todoCount');
+            if (todoCount) {
+                todoCount.textContent = count;
+
+                // Animate count change
+                todoCount.classList.add('animate__animated', 'animate__heartBeat');
+                setTimeout(() => {
+                    todoCount.classList.remove('animate__animated', 'animate__heartBeat');
+                }, 1000);
+            }
+
+            // If we're in kanban view, we need to update the column counts too
+            if (currentView === 'kanban') {
+                updateKanbanCounts();
+            }
+        }
+
+        // Update kanban column counts
+        function updateKanbanCounts() {
+            fetch('/api/todos')
+                .then(response => response.json())
+                .then(todos => {
+                    // Count todos by status
+                    const todoCount = todos.filter(todo => todo.status === 'TODO').length;
+                    const inProgressCount = todos.filter(todo => todo.status === 'IN_PROGRESS').length;
+                    const doneCount = todos.filter(todo => todo.status === 'COMPLETED').length;
+
+                    // Update the counts
+                    document.getElementById('todoCount-todo').textContent = todoCount;
+                    document.getElementById('todoCount-inprogress').textContent = inProgressCount;
+                    document.getElementById('todoCount-done').textContent = doneCount;
+
+                    // Animate count changes
+                    document.querySelectorAll('.badge').forEach(badge => {
+                        badge.classList.add('animate__animated', 'animate__heartBeat');
+                        setTimeout(() => {
+                            badge.classList.remove('animate__animated', 'animate__heartBeat');
+                        }, 1000);
+                    });
+                });
+        }
+
+        // Display todos in the list view
+        function displayListTodos(todos) {
+            const todoList = document.getElementById('todoList');
+            const emptyMessage = document.getElementById('emptyMessage');
+
+            // Clear current list
+            todoList.innerHTML = '';
+
+            if (todos.length === 0) {
+                emptyMessage.classList.remove('d-none');
+                // Animate empty message
+                emptyMessage.classList.add('animate__animated', 'animate__fadeIn');
+            } else {
+                emptyMessage.classList.add('d-none');
+
+                todos.forEach((todo, index) => {
+                    const template = document.getElementById('todoItemTemplate');
+                    const todoItem = document.importNode(template.content, true);
+
+                    const titleElement = todoItem.querySelector('.todo-title');
+                    const descriptionElement = todoItem.querySelector('.todo-description');
+                    const toggleCheckbox = todoItem.querySelector('.toggle-checkbox');
+                    const deleteButton = todoItem.querySelector('.delete-btn');
+                    const listItem = todoItem.querySelector('li');
+
+                    titleElement.textContent = todo.title;
+                    descriptionElement.textContent = todo.description || 'No description';
+
+                    // Set data attribute for ID
+                    listItem.dataset.id = todo.id;
+
+                    // Add animation delay based on index
+                    listItem.style.animationDelay = `${index * 0.1}s`;
+                    listItem.classList.add('animate__animated', 'animate__fadeInUp');
+
+                    // Handle completed todos
+                    if (todo.completed) {
+                        titleElement.classList.add('completed');
+                        toggleCheckbox.checked = true;
+                        toggleCheckbox.title = "Mark as incomplete";
+                    } else {
+                        toggleCheckbox.title = "Mark as complete";
+                    }
+
+                    // Add event listeners
+                    deleteButton.addEventListener('click', () => confirmDelete(todo.id, todo.title));
+                    toggleCheckbox.addEventListener('change', () => toggleTodo(todo.id, toggleCheckbox.checked));
+
+                    todoList.appendChild(todoItem);
+                });
+            }
+        }
+
+        // Display todos in the kanban board
+        function displayKanbanTodos(todos) {
+            // Clear all columns
+            const todoColumn = document.getElementById('todoList-todo');
+            const inProgressColumn = document.getElementById('todoList-inprogress');
+            const doneColumn = document.getElementById('todoList-done');
+
+            todoColumn.innerHTML = '';
+            inProgressColumn.innerHTML = '';
+            doneColumn.innerHTML = '';
+
+            // If no todos, show empty state in all columns
+            if (todos.length === 0) {
+                const emptyTemplate = document.getElementById('emptyColumnTemplate');
+
+                todoColumn.appendChild(document.importNode(emptyTemplate.content, true));
+                inProgressColumn.appendChild(document.importNode(emptyTemplate.content, true));
+                doneColumn.appendChild(document.importNode(emptyTemplate.content, true));
+                return;
+            }
+
+            // Split todos into columns based on status
+            const todoOnlyTodos = todos.filter(todo => todo.status === 'TODO');
+            const inProgressTodos = todos.filter(todo => todo.status === 'IN_PROGRESS');
+            const completedTodos = todos.filter(todo => todo.status === 'COMPLETED');
+
+            // Display todos in each column
+            displayKanbanColumn(todoOnlyTodos, todoColumn, 'todo');
+            displayKanbanColumn(inProgressTodos, inProgressColumn, 'inprogress');
+            displayKanbanColumn(completedTodos, doneColumn, 'done');
+
+            // Update column counts
+            updateKanbanCounts();
+        }
+
+        // Display todos in a kanban column
+        function displayKanbanColumn(todos, columnElement, columnType) {
+            if (todos.length === 0) {
+                const emptyTemplate = document.getElementById('emptyColumnTemplate');
+                columnElement.appendChild(document.importNode(emptyTemplate.content, true));
+                return;
+            }
+
+            todos.forEach((todo, index) => {
+                const template = document.getElementById('kanbanItemTemplate');
+                const kanbanItem = document.importNode(template.content, true);
+
+                const titleElement = kanbanItem.querySelector('.todo-title');
+                const descriptionElement = kanbanItem.querySelector('.todo-description');
+                const moveButton = kanbanItem.querySelector('.move-btn');
+                const deleteButton = kanbanItem.querySelector('.delete-btn');
+                const itemElement = kanbanItem.querySelector('.kanban-item');
+
+                titleElement.textContent = todo.title;
+                descriptionElement.textContent = todo.description || 'No description';
+
+                // Set data attribute for ID
+                itemElement.dataset.id = todo.id;
+
+                // Set data attribute for column type (for drag and drop)
+                itemElement.dataset.column = columnType;
+
+                // Make item draggable
+                itemElement.setAttribute('draggable', 'true');
+
+                // Add drag event listeners
+                itemElement.addEventListener('dragstart', handleDragStart);
+                itemElement.addEventListener('dragend', handleDragEnd);
+
+                // Add animation delay based on index
+                itemElement.style.animationDelay = `${index * 0.1}s`;
+
+                // Configure move button based on column
+                if (columnType === 'todo') {
+                    moveButton.title = "Move to In Progress";
+                    moveButton.addEventListener('click', () => moveToInProgress(todo.id));
+                } else if (columnType === 'inprogress') {
+                    moveButton.title = "Mark as Done";
+                    moveButton.addEventListener('click', () => markAsDone(todo.id));
+                } else if (columnType === 'done') {
+                    // No move button needed in Done column
+                    moveButton.remove();
+                }
+
+                // Add delete event listener
+                deleteButton.addEventListener('click', () => confirmDelete(todo.id, todo.title));
+
+                columnElement.appendChild(kanbanItem);
+            });
+        }
+
+        // Move a todo from Todo to In Progress
+        function moveToInProgress(id) {
+            playClickSound();
+
+            // Update the todo status to IN_PROGRESS
+            fetch(`/api/todos/${id}/status/IN_PROGRESS`, {
+                method: 'PUT'
+            })
+            .then(response => {
+                if (response.ok) {
+                    loadTodos();
+                    showToast('Task moved to In Progress', 'info');
+                } else {
+                    showToast('Failed to update task. Please try again.', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error moving todo to in progress:', error);
+                showToast('Failed to update task. Please try again.', 'error');
+            });
+        }
+
+        // Mark a todo as done
+        function markAsDone(id) {
+            playClickSound();
+
+            // Update the todo status to COMPLETED
+            fetch(`/api/todos/${id}/status/COMPLETED`, {
+                method: 'PUT'
+            })
+            .then(response => {
+                if (response.ok) {
+                    loadTodos();
+                    showToast('Task marked as completed', 'success');
+                } else {
+                    showToast('Failed to update task. Please try again.', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error marking todo as done:', error);
+                showToast('Failed to update task. Please try again.', 'error');
+            });
+        }
+
+        // Variables to store drag state
+        let draggedItem = null;
+        let dragSourceColumn = null;
+
+        // Setup drag and drop functionality
+        function setupDragAndDrop() {
+            // Add event listeners to kanban columns
+            const columns = document.querySelectorAll('.kanban-items');
+            columns.forEach(column => {
+                column.addEventListener('dragover', handleDragOver);
+                column.addEventListener('dragenter', handleDragEnter);
+                column.addEventListener('dragleave', handleDragLeave);
+                column.addEventListener('drop', handleDrop);
+            });
+        }
+
+        // Handle the start of a drag operation
+        function handleDragStart(e) {
+            // Store the dragged item
+            draggedItem = this;
+            dragSourceColumn = this.dataset.column;
+
+            // Add a class to style the item being dragged
+            setTimeout(() => {
+                this.classList.add('dragging');
+            }, 0);
+
+            // Set the data being dragged
+            e.dataTransfer.setData('text/plain', this.dataset.id);
+            e.dataTransfer.effectAllowed = 'move';
+
+            // Play sound
+            playClickSound();
+        }
+
+        // Handle the end of a drag operation
+        function handleDragEnd(e) {
+            // Remove the dragging class
+            this.classList.remove('dragging');
+
+            // Reset drag state
+            draggedItem = null;
+            dragSourceColumn = null;
+
+            // Remove drag-over class from all columns
+            document.querySelectorAll('.kanban-items').forEach(column => {
+                column.classList.remove('drag-over');
+            });
+        }
+
+        // Handle dragover event (needed to allow dropping)
+        function handleDragOver(e) {
+            // Prevent default to allow drop
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            return false;
+        }
+
+        // Handle dragenter event
+        function handleDragEnter(e) {
+            // Add a class to highlight the drop target
+            this.classList.add('drag-over');
+        }
+
+        // Handle dragleave event
+        function handleDragLeave(e) {
+            // Remove the highlight class
+            this.classList.remove('drag-over');
+        }
+
+        // Handle drop event
+        function handleDrop(e) {
+            // Prevent default action
+            e.preventDefault();
+
+            // Remove the highlight class
+            this.classList.remove('drag-over');
+
+            // Get the id of the dragged item
+            const todoId = e.dataTransfer.getData('text/plain');
+
+            // Get the target column type
+            const targetColumn = this.id.split('-')[1]; // Extract column type from id (todoList-todo, todoList-inprogress, todoList-done)
+
+            // If dropped in a different column, update the todo
+            if (dragSourceColumn !== targetColumn) {
+                updateTodoStatus(todoId, targetColumn);
+            }
+
+            return false;
+        }
+
+        // Update todo status based on the column it was dropped in
+        function updateTodoStatus(todoId, targetColumn) {
+            // Determine the status based on the target column
+            let status;
+            let message;
+
+            if (targetColumn === 'todo') {
+                status = 'TODO';
+                message = 'Task moved to To Do';
+            } else if (targetColumn === 'inprogress') {
+                status = 'IN_PROGRESS';
+                message = 'Task moved to In Progress';
+            } else if (targetColumn === 'done') {
+                status = 'COMPLETED';
+                message = 'Task marked as completed';
+            }
+
+            // Update the todo status
+            fetch(`/api/todos/${todoId}/status/${status}`, {
+                method: 'PUT'
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Reload todos to update the UI
+                    loadTodos();
+
+                    // Show success message
+                    showToast(message, targetColumn === 'done' ? 'success' : 'info');
+
+                    // Play sound
+                    playClickSound();
+                } else {
+                    showToast('Failed to update task. Please try again.', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error updating todo status:', error);
+                showToast('Failed to update task. Please try again.', 'error');
+            });
+        }
+
+        // Create a new todo
+        function createTodo(title, description) {
+            fetch('/api/todos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    title: title,
+                    description: description,
+                    completed: false
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Play click sound when task is created
+                    playClickSound();
+                    loadTodos();
+                } else {
+                    showToast('Failed to create task. Please try again.', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error creating todo:', error);
+                showToast('Failed to create task. Please try again.', 'error');
+            });
+        }
+
+        // Toggle todo completion status
+        function toggleTodo(id, completed) {
+            fetch(`/api/todos/${id}`, {
+                method: 'GET'
+            })
+            .then(response => response.json())
+            .then(todo => {
+                todo.completed = completed;
+
+                return fetch(`/api/todos/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(todo)
+                });
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Play click sound
+                    playClickSound();
+
+                    loadTodos();
+                    showToast(`Task marked as ${completed ? 'completed' : 'incomplete'}`, 'success');
+                } else {
+                    showToast('Failed to update task. Please try again.', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error toggling todo:', error);
+                showToast('Failed to update task. Please try again.', 'error');
+            });
+        }
+
+        // Confirm before deleting
+        function confirmDelete(id, title) {
+            if (confirm(`Are you sure you want to delete "${title}"?`)) {
+                // Play click sound when user confirms deletion
+                playClickSound();
+                deleteTodo(id);
+            }
+        }
+
+        // Delete a todo
+        function deleteTodo(id) {
+            // Animate item removal
+            const item = document.querySelector(`li[data-id="${id}"]`);
+            if (item) {
+                item.classList.add('animate__animated', 'animate__fadeOutRight');
+
+                // Wait for animation to complete before removing
+                item.addEventListener('animationend', function() {
+                    // Now make the actual delete request
+                    performDelete(id);
+                }, { once: true });
+            } else {
+                performDelete(id);
+            }
+        }
+
+        function performDelete(id) {
+            fetch(`/api/todos/${id}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Play click sound when task is deleted
+                    playClickSound();
+                    loadTodos();
+                    showToast('Task deleted successfully', 'info');
+                } else {
+                    showToast('Failed to delete task. Please try again.', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting todo:', error);
+                showToast('Failed to delete task. Please try again.', 'error');
+            });
+        }
+
+        // Toast notification system
+        function showToast(message, type = 'info') {
+            // Create toast container if it doesn't exist
+            let toastContainer = document.getElementById('toast-container');
+            if (!toastContainer) {
+                toastContainer = document.createElement('div');
+                toastContainer.id = 'toast-container';
+
+                // Position toasts at the top on mobile, bottom-right on larger screens
+                const isMobile = window.innerWidth < 768;
+                toastContainer.className = isMobile 
+                    ? 'position-fixed top-0 start-0 end-0 p-3' 
+                    : 'position-fixed bottom-0 end-0 p-3';
+
+                toastContainer.style.zIndex = '1050'; // Higher z-index to ensure visibility
+                document.body.appendChild(toastContainer);
+            }
+
+            // Create toast element
+            const toastId = 'toast-' + Date.now();
+            const toast = document.createElement('div');
+            toast.id = toastId;
+
+            // Add width-100 class on mobile
+            const isMobile = window.innerWidth < 768;
+            toast.className = `toast align-items-center text-white bg-${type === 'error' ? 'danger' : type} border-0 ${isMobile ? 'w-100' : ''}`;
+            toast.setAttribute('role', 'alert');
+            toast.setAttribute('aria-live', 'assertive');
+            toast.setAttribute('aria-atomic', 'true');
+
+            // Add icon based on toast type
+            let icon = 'info-circle';
+            if (type === 'success') icon = 'check-circle';
+            if (type === 'error' || type === 'danger') icon = 'exclamation-circle';
+            if (type === 'warning') icon = 'exclamation-triangle';
+
+            // Toast content with icon
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="fas fa-${icon} me-2"></i>${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            `;
+
+            // Add to container
+            toastContainer.appendChild(toast);
+
+            // Initialize and show toast
+            const bsToast = new bootstrap.Toast(toast, {
+                animation: true,
+                autohide: true,
+                delay: isMobile ? 4000 : 3000 // Longer display time on mobile
+            });
+            bsToast.show();
+
+            // Remove from DOM after hiding
+            toast.addEventListener('hidden.bs.toast', function() {
+                toast.remove();
+            });
+
+            // Reposition floating action button if needed
+            const floatingBtn = document.getElementById('addTaskBtn');
+            if (isMobile && floatingBtn) {
+                floatingBtn.style.bottom = '5rem'; // Move button up when toast is shown
+                setTimeout(() => {
+                    floatingBtn.style.bottom = '1.5rem'; // Reset after toast duration
+                }, 4000);
+            }
+        }
+    </script>
+</body>
+</html>
