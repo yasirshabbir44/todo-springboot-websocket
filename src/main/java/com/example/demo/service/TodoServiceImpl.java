@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.model.Status;
 import com.example.demo.model.Todo;
+import com.example.demo.model.TodoAction;
 import com.example.demo.repository.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,7 @@ public class TodoServiceImpl implements TodoService {
         Todo createdTodo = todoRepository.save(todo);
 
         // Send WebSocket notification about the new todo
-        webSocketService.sendTodoUpdate(createdTodo, "CREATED");
+        webSocketService.sendTodoUpdate(createdTodo, TodoAction.CREATED);
 
         return createdTodo;
     }
@@ -64,7 +65,7 @@ public class TodoServiceImpl implements TodoService {
         Todo updatedTodo = todoRepository.save(todo);
 
         // Send WebSocket notification about the updated todo
-        webSocketService.sendTodoUpdate(updatedTodo, "UPDATED");
+        webSocketService.sendTodoUpdate(updatedTodo, TodoAction.UPDATED);
 
         return updatedTodo;
     }
@@ -78,7 +79,7 @@ public class TodoServiceImpl implements TodoService {
         todoRepository.deleteById(id);
 
         // Send WebSocket notification about the deleted todo
-        webSocketService.sendTodoUpdate(todoToDelete, "DELETED");
+        webSocketService.sendTodoUpdate(todoToDelete, TodoAction.DELETED);
     }
 
     @Override

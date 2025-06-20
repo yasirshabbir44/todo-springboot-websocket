@@ -73,7 +73,7 @@ public class TodoController {
         return ResponseEntity.ok(todoService.getIncompleteTodos());
     }
 
-    @GetMapping("/inprogress")
+    @GetMapping("/in-progress")
     public ResponseEntity<List<Todo>> getInProgressTodos() {
         return ResponseEntity.ok(todoService.getInProgressTodos());
     }
