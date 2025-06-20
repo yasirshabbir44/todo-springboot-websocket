@@ -199,8 +199,18 @@
                     </div>
                 </div>
                 <div class="col">
+                    <div class="status-indicator-list">
+                        <div class="status-badge todo-badge">To Do</div>
+                        <div class="status-badge inprogress-badge">In Progress</div>
+                        <div class="status-badge completed-badge">Completed</div>
+                    </div>
                     <h5 class="todo-title"></h5>
                     <p class="todo-description"></p>
+                    <div class="task-progress-container">
+                        <div class="task-progress-bar">
+                            <div class="task-progress-fill"></div>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-auto">
                     <button class="btn btn-sm btn-danger delete-btn" title="Delete task">
@@ -214,8 +224,18 @@
     <!-- Kanban Item Template -->
     <template id="kanbanItemTemplate">
         <div class="kanban-item">
+            <div class="status-indicator">
+                <div class="status-badge todo-badge">To Do</div>
+                <div class="status-badge inprogress-badge">In Progress</div>
+                <div class="status-badge completed-badge">Completed</div>
+            </div>
             <h5 class="todo-title"></h5>
             <p class="todo-description"></p>
+            <div class="task-progress-container">
+                <div class="task-progress-bar">
+                    <div class="task-progress-fill"></div>
+                </div>
+            </div>
             <div class="item-footer">
                 <div class="item-actions">
                     <button class="btn btn-sm btn-outline-primary move-btn" title="Move to next column">
@@ -830,6 +850,12 @@
                     const deleteButton = todoItem.querySelector('.delete-btn');
                     const listItem = todoItem.querySelector('li');
 
+                    // Get status badges and progress bar
+                    const todoBadge = todoItem.querySelector('.todo-badge');
+                    const inProgressBadge = todoItem.querySelector('.inprogress-badge');
+                    const completedBadge = todoItem.querySelector('.completed-badge');
+                    const progressFill = todoItem.querySelector('.task-progress-fill');
+
                     titleElement.textContent = todo.title;
                     descriptionElement.textContent = todo.description || 'No description';
 
@@ -840,7 +866,19 @@
                     listItem.style.animationDelay = `${index * 0.1}s`;
                     listItem.classList.add('animate__animated', 'animate__fadeInUp');
 
-                    // Handle completed todos
+                    // Set status badge and progress bar based on status
+                    if (todo.status === 'TODO') {
+                        todoBadge.style.display = 'inline-block';
+                        progressFill.style.width = '0%';
+                    } else if (todo.status === 'IN_PROGRESS') {
+                        inProgressBadge.style.display = 'inline-block';
+                        progressFill.style.width = '50%';
+                    } else if (todo.status === 'COMPLETED') {
+                        completedBadge.style.display = 'inline-block';
+                        progressFill.style.width = '100%';
+                    }
+
+                    // Handle completed todos for backward compatibility
                     if (todo.completed) {
                         titleElement.classList.add('completed');
                         toggleCheckbox.checked = true;
@@ -911,6 +949,12 @@
                 const deleteButton = kanbanItem.querySelector('.delete-btn');
                 const itemElement = kanbanItem.querySelector('.kanban-item');
 
+                // Get status badges and progress bar
+                const todoBadge = kanbanItem.querySelector('.todo-badge');
+                const inProgressBadge = kanbanItem.querySelector('.inprogress-badge');
+                const completedBadge = kanbanItem.querySelector('.completed-badge');
+                const progressFill = kanbanItem.querySelector('.task-progress-fill');
+
                 titleElement.textContent = todo.title;
                 descriptionElement.textContent = todo.description || 'No description';
 
@@ -929,6 +973,18 @@
 
                 // Add animation delay based on index
                 itemElement.style.animationDelay = `${index * 0.1}s`;
+
+                // Set status badge and progress bar based on status
+                if (todo.status === 'TODO') {
+                    todoBadge.style.display = 'inline-block';
+                    progressFill.style.width = '0%';
+                } else if (todo.status === 'IN_PROGRESS') {
+                    inProgressBadge.style.display = 'inline-block';
+                    progressFill.style.width = '50%';
+                } else if (todo.status === 'COMPLETED') {
+                    completedBadge.style.display = 'inline-block';
+                    progressFill.style.width = '100%';
+                }
 
                 // Configure move button based on column
                 if (columnType === 'todo') {
