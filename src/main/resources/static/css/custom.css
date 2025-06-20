@@ -62,23 +62,23 @@
 }
 
 :root {
-  /* Improved color palette for better readability and contrast */
-  --primary-color: #3a86ff;
-  --secondary-color: #4361ee;
-  --success-color: #38b000;
-  --warning-color: #ff9f1c;
-  --danger-color: #e63946;
-  --light-color: #f8f9fa;
-  --dark-color: #212529;
-  --gray-100: #f8f9fa;
-  --gray-200: #e9ecef;
-  --gray-300: #dee2e6;
-  --gray-400: #ced4da;
-  --gray-500: #adb5bd;
-  --gray-600: #6c757d;
-  --gray-700: #495057;
-  --gray-800: #343a40;
-  --gray-900: #212529;
+  /* Modern, eye-pleasing color palette */
+  --primary-color: #6366f1;    /* Indigo */
+  --secondary-color: #8b5cf6;  /* Purple */
+  --success-color: #10b981;    /* Emerald */
+  --warning-color: #f59e0b;    /* Amber */
+  --danger-color: #ef4444;     /* Red */
+  --light-color: #f9fafb;      /* Gray-50 */
+  --dark-color: #1f2937;       /* Gray-800 */
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
 
   /* Theme variables */
   --bg-color: var(--dark-color);
@@ -169,14 +169,14 @@ body.light-mode {
 
 /* Enhanced header */
 .app-header {
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color), var(--primary-color));
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
   background-size: 200% 200%;
   animation: colorShift 15s ease infinite;
   color: white;
   padding: 2rem 0;
   border-radius: 0 0 20px 20px;
   margin-bottom: 1.5rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.15);
   position: relative;
   overflow: hidden;
 }
@@ -274,10 +274,10 @@ body.light-mode {
 
 /* Enhanced card styling */
 .card {
-  border-radius: 12px;
+  border-radius: 16px;
   border: none;
   background-color: var(--card-bg);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
   transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
   overflow: hidden;
   animation: fadeInScale 0.5s ease-out;
@@ -287,7 +287,7 @@ body.light-mode {
 
 .card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12), 0 4px 8px rgba(0, 0, 0, 0.06);
 }
 
 /* Card sizing for larger screens */
@@ -303,7 +303,7 @@ body.light-mode {
 
 .card-header {
   border-bottom: none;
-  padding: 1rem 1.25rem;
+  padding: 1.25rem 1.5rem;
   background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
   color: white;
   font-weight: var(--heading-font-weight);
@@ -312,6 +312,7 @@ body.light-mode {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-radius: 16px 16px 0 0;
 }
 
 .card-header h5 {
@@ -333,11 +334,11 @@ body.light-mode {
 
 /* Enhanced button styling */
 .btn {
-  border-radius: 8px;
-  padding: 0.5rem 1.25rem;
+  border-radius: 10px;
+  padding: 0.6rem 1.5rem;
   font-weight: 500;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   position: relative;
   overflow: hidden;
   z-index: 1;
@@ -348,12 +349,12 @@ body.light-mode {
 }
 
 .btn i {
-  margin-right: 0.4rem;
+  margin-right: 0.5rem;
 }
 
 .btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   opacity: 0.95;
 }
 
@@ -365,24 +366,25 @@ body.light-mode {
 /* Improved focus state for accessibility */
 .btn:focus, .btn:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.4);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.4);
 }
 
 /* Ensure focus is visible even when using mouse */
 .btn:focus:not(:focus-visible) {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .btn-primary {
   background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-  border-color: var(--primary-color);
+  border: none;
   background-size: 200% auto;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
 }
 
 .btn-primary:hover, .btn-primary:focus {
   background-position: right center;
-  border-color: var(--secondary-color);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3);
 }
 
 /* Add pulsing effect to the Add Task button */
@@ -687,18 +689,19 @@ body.light-mode {
 
 /* Form control styling */
 .form-control {
-  border-radius: 8px;
-  padding: 0.65rem 1rem;
+  border-radius: 10px;
+  padding: 0.75rem 1.25rem;
   border: 1px solid var(--gray-300);
   background-color: var(--card-bg);
   color: var(--text-color);
   transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
-  font-size: 0.95rem;
-  line-height: 1.5;
+  font-size: 1rem;
+  line-height: 1.6;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
 .form-control:focus {
-  box-shadow: 0 0 0 0.2rem rgba(58, 134, 255, 0.2);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
   border-color: var(--primary-color);
   outline: none;
 }
@@ -960,19 +963,19 @@ body.is-fullscreen .action-bar {
 /* Kanban item styles */
 .kanban-item {
   background-color: var(--item-bg);
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 0.75rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.03);
   transition: all 0.25s ease;
-  border-left: 3px solid transparent;
+  border-left: 4px solid transparent;
   cursor: grab;
   animation: fadeInScale 0.5s ease-out;
   word-break: break-word;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  min-height: 120px; /* Minimum height for consistency */
+  min-height: 130px; /* Minimum height for consistency */
   position: relative; /* For priority indicator positioning */
 }
 
@@ -1058,21 +1061,23 @@ body.is-fullscreen .action-bar {
 }
 
 .kanban-item:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border-left: 3px solid var(--primary-color);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-left: 4px solid var(--primary-color);
 }
 
 .kanban-item .todo-title {
-  font-weight: 500;
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin-bottom: 0.75rem;
+  color: var(--text-color);
 }
 
 .kanban-item .todo-description {
-  font-size: 0.85rem;
-  color: var(--gray-600);
-  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--gray-500);
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
 }
 
 .kanban-item .item-footer {
@@ -1092,15 +1097,30 @@ body.is-fullscreen .action-bar {
 /* Column specific styles */
 #todoList-todo .kanban-item {
   border-left-color: var(--primary-color);
+  box-shadow: 0 3px 10px rgba(99, 102, 241, 0.08), 0 1px 3px rgba(99, 102, 241, 0.05);
+}
+
+#todoList-todo .kanban-item:hover {
+  box-shadow: 0 8px 16px rgba(99, 102, 241, 0.12), 0 2px 4px rgba(99, 102, 241, 0.06);
 }
 
 #todoList-inprogress .kanban-item {
   border-left-color: var(--warning-color);
+  box-shadow: 0 3px 10px rgba(245, 158, 11, 0.08), 0 1px 3px rgba(245, 158, 11, 0.05);
+}
+
+#todoList-inprogress .kanban-item:hover {
+  box-shadow: 0 8px 16px rgba(245, 158, 11, 0.12), 0 2px 4px rgba(245, 158, 11, 0.06);
 }
 
 #todoList-done .kanban-item {
   border-left-color: var(--success-color);
-  opacity: 0.8;
+  box-shadow: 0 3px 10px rgba(16, 185, 129, 0.08), 0 1px 3px rgba(16, 185, 129, 0.05);
+  opacity: 0.9;
+}
+
+#todoList-done .kanban-item:hover {
+  box-shadow: 0 8px 16px rgba(16, 185, 129, 0.12), 0 2px 4px rgba(16, 185, 129, 0.06);
 }
 
 /* Empty column placeholder */
