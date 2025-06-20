@@ -84,6 +84,38 @@
             </div>
         </div>
 
+        <!-- Charts Section -->
+        <div class="card mb-4" id="chartsSection">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-chart-pie me-2"></i>Task Analytics</h5>
+                <button class="btn btn-sm btn-outline-primary" id="toggleChartsBtn">
+                    <i class="fas fa-chevron-up"></i>
+                </button>
+            </div>
+            <div class="card-body" id="chartsContainer">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="chart-container">
+                            <h6 class="text-center mb-3">Task Distribution</h6>
+                            <canvas id="statusPieChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="chart-container">
+                            <h6 class="text-center mb-3">Task Count by Status</h6>
+                            <canvas id="statusBarChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="chart-container">
+                            <h6 class="text-center mb-3">Task Completion Trend</h6>
+                            <canvas id="completionLineChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Kanban Board View -->
         <div id="kanbanView" class="kanban-board">
             <div class="row g-3">
@@ -317,7 +349,15 @@
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.6.1/dist/sockjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 
+    <!-- Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
+        // Chart instances
+        let statusPieChart;
+        let statusBarChart;
+        let completionLineChart;
+
         // Audio Context for sound effects
         let audioContext;
 
@@ -361,6 +401,7 @@
             initializeTheme();
             setupDragAndDrop();
             connectWebSocket();
+            initializeCharts();
 
             // Default to kanban view
             toggleView('kanban');
@@ -477,6 +518,9 @@
                 // Remove transition class after the theme change is complete
                 setTimeout(() => {
                     document.body.classList.remove('theme-transition');
+
+                    // Update charts to match new theme
+                    updateChartsTheme();
                 }, 500); // Match this with the CSS transition duration
             }, 50);
         }
@@ -617,6 +661,12 @@
                 toggleFullscreen();
             });
 
+            // Charts toggle
+            document.getElementById('toggleChartsBtn').addEventListener('click', function() {
+                playClickSound();
+                toggleCharts();
+            });
+
             // Form submission
             document.getElementById('todoForm').addEventListener('submit', function(e) {
                 e.preventDefault();
@@ -699,6 +749,9 @@
                         displayListTodos(todos);
                     }
                     updateTodoCount(todos.length);
+
+                    // Update charts with the new data
+                    updateCharts(todos);
                 })
                 .catch(error => {
                     console.error('Error loading todos:', error);
@@ -1363,6 +1416,225 @@
                     floatingBtn.style.bottom = '1.5rem'; // Reset after toast duration
                 }, 4000);
             }
+        }
+
+        // Initialize charts
+        function initializeCharts() {
+            // Set initial display state (expanded by default)
+            const chartsContainer = document.getElementById('chartsContainer');
+            const toggleBtn = document.getElementById('toggleChartsBtn');
+            const toggleIcon = toggleBtn.querySelector('i');
+
+            chartsContainer.style.display = 'block';
+            toggleIcon.classList.remove('fa-chevron-down');
+            toggleIcon.classList.add('fa-chevron-up');
+
+            // Set Chart.js defaults to match the app's theme
+            Chart.defaults.color = getComputedStyle(document.body).getPropertyValue('--text-color');
+            Chart.defaults.borderColor = getComputedStyle(document.body).getPropertyValue('--gray-300');
+
+            // Initialize pie chart for task distribution
+            const pieCtx = document.getElementById('statusPieChart').getContext('2d');
+            statusPieChart = new Chart(pieCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['To Do', 'In Progress', 'Completed'],
+                    datasets: [{
+                        data: [0, 0, 0],
+                        backgroundColor: [
+                            getComputedStyle(document.body).getPropertyValue('--primary-color'),
+                            getComputedStyle(document.body).getPropertyValue('--warning-color'),
+                            getComputedStyle(document.body).getPropertyValue('--success-color')
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // Initialize bar chart for task count by status
+            const barCtx = document.getElementById('statusBarChart').getContext('2d');
+            statusBarChart = new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['To Do', 'In Progress', 'Completed'],
+                    datasets: [{
+                        label: 'Number of Tasks',
+                        data: [0, 0, 0],
+                        backgroundColor: [
+                            getComputedStyle(document.body).getPropertyValue('--primary-color'),
+                            getComputedStyle(document.body).getPropertyValue('--warning-color'),
+                            getComputedStyle(document.body).getPropertyValue('--success-color')
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Initialize line chart for task completion trend
+            // This will simulate time-based data for demonstration purposes
+            const lineCtx = document.getElementById('completionLineChart').getContext('2d');
+            completionLineChart = new Chart(lineCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'],
+                    datasets: [{
+                        label: 'Completed Tasks',
+                        data: [0, 0, 0, 0, 0, 0, 0],
+                        borderColor: getComputedStyle(document.body).getPropertyValue('--success-color'),
+                        backgroundColor: 'rgba(16, 185, 129, 0.2)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Update charts with new data
+        function updateCharts(todos) {
+            if (!statusPieChart || !statusBarChart || !completionLineChart) {
+                return; // Charts not initialized yet
+            }
+
+            // Count todos by status
+            const todoCount = todos.filter(todo => todo.status === 'TODO').length;
+            const inProgressCount = todos.filter(todo => todo.status === 'IN_PROGRESS').length;
+            const completedCount = todos.filter(todo => todo.status === 'COMPLETED').length;
+
+            // Update pie chart
+            statusPieChart.data.datasets[0].data = [todoCount, inProgressCount, completedCount];
+            statusPieChart.update();
+
+            // Update bar chart
+            statusBarChart.data.datasets[0].data = [todoCount, inProgressCount, completedCount];
+            statusBarChart.update();
+
+            // Update line chart with simulated time-based data
+            // For demonstration, we'll generate random data based on the current completed count
+            const simulatedData = [];
+            let cumulativeCount = 0;
+
+            for (let i = 0; i < 7; i++) {
+                // Simulate a random number of tasks completed each day
+                // but ensure the total matches the current completed count
+                let remaining = completedCount - cumulativeCount;
+                let dayCount = 0;
+
+                if (i === 6 && remaining > 0) {
+                    // Last day, add all remaining tasks
+                    dayCount = remaining;
+                } else if (remaining > 0) {
+                    // Random number between 0 and remaining, weighted to be smaller
+                    dayCount = Math.floor(Math.random() * Math.min(remaining, 3));
+                }
+
+                cumulativeCount += dayCount;
+                simulatedData.push(cumulativeCount);
+            }
+
+            completionLineChart.data.datasets[0].data = simulatedData;
+            completionLineChart.update();
+        }
+
+        // Toggle charts visibility
+        function toggleCharts() {
+            const chartsContainer = document.getElementById('chartsContainer');
+            const toggleBtn = document.getElementById('toggleChartsBtn');
+            const toggleIcon = toggleBtn.querySelector('i');
+
+            if (chartsContainer.style.display === 'none') {
+                // Show charts
+                chartsContainer.style.display = 'block';
+                toggleIcon.classList.remove('fa-chevron-down');
+                toggleIcon.classList.add('fa-chevron-up');
+
+                // Update charts with current data
+                fetch('/api/todos')
+                    .then(response => response.json())
+                    .then(todos => {
+                        updateCharts(todos);
+                    });
+
+                showToast('Charts visible', 'info');
+            } else {
+                // Hide charts
+                chartsContainer.style.display = 'none';
+                toggleIcon.classList.remove('fa-chevron-up');
+                toggleIcon.classList.add('fa-chevron-down');
+                showToast('Charts hidden', 'info');
+            }
+        }
+
+        // Update charts theme to match current app theme
+        function updateChartsTheme() {
+            if (!statusPieChart || !statusBarChart || !completionLineChart) {
+                return; // Charts not initialized yet
+            }
+
+            // Get current theme colors
+            const textColor = getComputedStyle(document.body).getPropertyValue('--text-color');
+            const primaryColor = getComputedStyle(document.body).getPropertyValue('--primary-color');
+            const warningColor = getComputedStyle(document.body).getPropertyValue('--warning-color');
+            const successColor = getComputedStyle(document.body).getPropertyValue('--success-color');
+            const gridColor = getComputedStyle(document.body).getPropertyValue('--gray-300');
+
+            // Update Chart.js defaults
+            Chart.defaults.color = textColor;
+            Chart.defaults.borderColor = gridColor;
+
+            // Update pie chart colors
+            statusPieChart.data.datasets[0].backgroundColor = [primaryColor, warningColor, successColor];
+            statusPieChart.options.plugins.legend.labels.color = textColor;
+            statusPieChart.update();
+
+            // Update bar chart colors
+            statusBarChart.data.datasets[0].backgroundColor = [primaryColor, warningColor, successColor];
+            statusBarChart.options.scales.y.grid.color = gridColor;
+            statusBarChart.options.scales.x.grid.color = gridColor;
+            statusBarChart.options.scales.y.ticks.color = textColor;
+            statusBarChart.options.scales.x.ticks.color = textColor;
+            statusBarChart.update();
+
+            // Update line chart colors
+            completionLineChart.data.datasets[0].borderColor = successColor;
+            completionLineChart.data.datasets[0].backgroundColor = 'rgba(16, 185, 129, 0.2)';
+            completionLineChart.options.scales.y.grid.color = gridColor;
+            completionLineChart.options.scales.x.grid.color = gridColor;
+            completionLineChart.options.scales.y.ticks.color = textColor;
+            completionLineChart.options.scales.x.ticks.color = textColor;
+            completionLineChart.update();
         }
     </script>
 </body>

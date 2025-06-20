@@ -1449,6 +1449,56 @@ body.is-fullscreen .action-bar {
   }
 }
 
+/* Charts section styling */
+.chart-container {
+  position: relative;
+  height: 250px;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  background-color: var(--item-bg);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.chart-container:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.chart-container h6 {
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+#chartsSection {
+  animation: fadeInScale 0.5s ease-out;
+}
+
+#toggleChartsBtn {
+  transition: all 0.2s ease;
+}
+
+#toggleChartsBtn:hover {
+  transform: translateY(-2px);
+}
+
+#chartsContainer {
+  transition: all 0.3s ease;
+}
+
+/* Responsive chart adjustments */
+@media (max-width: 768px) {
+  .chart-container {
+    height: 200px;
+    margin-bottom: 1.5rem;
+  }
+
+  .chart-container h6 {
+    font-size: 0.9rem;
+  }
+}
+
 /* Very small screens (under 400px) */
 @media (max-width: 400px) {
   .filter-btn span, .view-btn span {
