@@ -86,7 +86,6 @@
   --card-bg: var(--gray-800);
   --item-bg: var(--gray-700);
   --item-hover-bg: var(--gray-600);
-  --footer-bg: var(--gray-800);
   --modal-bg: var(--gray-800);
 
   /* Typography variables */
@@ -138,7 +137,6 @@ body.light-mode {
   --card-bg: white;
   --item-bg: var(--gray-100);
   --item-hover-bg: var(--gray-200);
-  --footer-bg: var(--gray-200);
   --modal-bg: white;
 }
 
@@ -150,7 +148,6 @@ body.light-mode {
     --card-bg: white;
     --item-bg: var(--gray-100);
     --item-hover-bg: var(--gray-200);
-    --footer-bg: var(--gray-200);
     --modal-bg: white;
   }
 }
@@ -162,7 +159,6 @@ body.light-mode {
     --card-bg: var(--gray-800);
     --item-bg: var(--gray-700);
     --item-hover-bg: var(--gray-600);
-    --footer-bg: var(--gray-800);
     --modal-bg: var(--gray-800);
   }
 }
@@ -251,26 +247,6 @@ body.light-mode {
   animation: float 5s ease-in-out infinite, slideInFromLeft 0.8s ease-out;
 }
 
-/* Footer styling */
-.app-footer {
-  margin-top: auto;
-  background-color: var(--footer-bg);
-  color: var(--text-color);
-  padding: 1.5rem 0;
-  font-size: 0.9rem;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.footer-links a {
-  color: var(--text-color);
-  margin: 0 10px;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.footer-links a:hover {
-  color: var(--primary-color);
-}
 
 /* Enhanced card styling */
 .card {
@@ -605,26 +581,6 @@ body.light-mode {
   animation: slideInFromBottom 0.3s ease-out;
 }
 
-/* Footer link animations */
-.footer-links a {
-  position: relative;
-  overflow: hidden;
-}
-
-.footer-links a::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 1px;
-  background-color: var(--text-color);
-  transition: width 0.3s ease;
-}
-
-.footer-links a:hover::after {
-  width: 100%;
-}
 
 /* Enhanced modal styling */
 .modal-content {
@@ -912,8 +868,7 @@ body.is-fullscreen {
   overflow: hidden;
 }
 
-body.is-fullscreen .app-header,
-body.is-fullscreen .app-footer {
+body.is-fullscreen .app-header {
   display: none;
 }
 
@@ -1297,16 +1252,6 @@ body.is-fullscreen .action-bar {
     margin-right: 0.25rem;
   }
 
-  /* Footer adjustments */
-  .app-footer {
-    padding: 1rem 0;
-    font-size: 0.8rem;
-  }
-
-  .footer-links a {
-    margin: 0 5px;
-    font-size: 0.8rem;
-  }
 
   /* Card adjustments */
   .card {
