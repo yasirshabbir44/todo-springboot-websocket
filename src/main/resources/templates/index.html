@@ -947,6 +947,21 @@
                     deleteButton.addEventListener('click', () => confirmDelete(todo.id, todo.title));
                     toggleCheckbox.addEventListener('change', () => toggleTodo(todo.id, toggleCheckbox.checked));
 
+                    // Add click event listener to the title and description for easy marking as done
+                    if (todo.status !== 'COMPLETED') {
+                        titleElement.title = "Click to mark as done";
+                        descriptionElement.title = "Click to mark as done";
+
+                        titleElement.addEventListener('click', () => {
+                            playClickSound();
+                            toggleTodo(todo.id, true);
+                        });
+                        descriptionElement.addEventListener('click', () => {
+                            playClickSound();
+                            toggleTodo(todo.id, true);
+                        });
+                    }
+
                     todoList.appendChild(todoItem);
                 });
             }
@@ -1056,6 +1071,22 @@
 
                 // Add delete event listener
                 deleteButton.addEventListener('click', () => confirmDelete(todo.id, todo.title));
+
+                // Add click event listener to the title and description for easy marking as done
+                // Only add this functionality to Todo and In Progress items
+                if (todo.status !== 'COMPLETED') {
+                    titleElement.title = "Click to mark as done";
+                    descriptionElement.title = "Click to mark as done";
+
+                    titleElement.addEventListener('click', () => {
+                        playClickSound();
+                        markAsDone(todo.id);
+                    });
+                    descriptionElement.addEventListener('click', () => {
+                        playClickSound();
+                        markAsDone(todo.id);
+                    });
+                }
 
                 columnElement.appendChild(kanbanItem);
             });

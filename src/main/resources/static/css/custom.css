@@ -489,6 +489,7 @@ body.light-mode {
   margin-bottom: 0.3rem;
   color: var(--text-color);
   transition: color 0.2s ease;
+  cursor: pointer;
 }
 
 .todo-description {
@@ -496,6 +497,7 @@ body.light-mode {
   color: var(--gray-600);
   margin-bottom: 0;
   line-height: 1.4;
+  cursor: pointer;
 }
 
 .delete-btn {
@@ -1129,6 +1131,7 @@ body.is-fullscreen .action-bar {
   font-size: 1.05rem;
   margin-bottom: 0.75rem;
   color: var(--text-color);
+  cursor: pointer;
 }
 
 .kanban-item .todo-description {
@@ -1136,6 +1139,7 @@ body.is-fullscreen .action-bar {
   color: var(--gray-500);
   margin-bottom: 0.75rem;
   line-height: 1.5;
+  cursor: pointer;
 }
 
 .kanban-item .item-footer {
